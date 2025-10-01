@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO
 
 # Load your TFLite model
-model = YOLO("WasteWiseModel.tflite")
+model = YOLO("WasteWiseWasteVerificationModel1.1.tflite")
 names = model.names
 
 # Start webcam

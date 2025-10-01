@@ -2,12 +2,20 @@ import cv2
 from ultralytics import YOLO
 
 # Load your TFLite model
-model = YOLO("WasteWiseModel.tflite")
+model = YOLO("WasteWiseWasteVerificationModel1.1.tflite")
 names = model.names
 
 # Load the test image
 image_path = "StaticBottles.jpg"  # replace with your image file
 frame = cv2.imread(image_path)
+
+# Resize while keeping aspect ratio (max dimension = 640px)
+h, w = frame.shape[:2]
+scale = 640 / max(h, w)
+if scale < 1:  # only shrink, don’t upscale
+    new_w, new_h = int(w * scale), int(h * scale)
+    frame = cv2.resize(frame, (new_w, new_h), interpolation=cv2.INTER_AREA)
+
 frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 # Mouse callback to print RGB values
@@ -20,7 +28,7 @@ cv2.namedWindow("RGB")
 cv2.setMouseCallback("RGB", RGB)
 
 # Perform detection
-results = model(frame)  # this works for TFLite too in Ultralytics API
+results = model(frame)
 
 # Draw detections
 for r in results:
